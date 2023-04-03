@@ -23,7 +23,6 @@ export default function Footer() {
           <FlowbiteFooter.Link href="https://github.com/ollierwoodman/talk_to_my_member">Github</FlowbiteFooter.Link>
           <FlowbiteFooter.Link href="/privacy">Privacy</FlowbiteFooter.Link>
           <FlowbiteFooter.Link href="/disclaimer">Disclaimer</FlowbiteFooter.Link>
-          <FlowbiteFooter.Link href="https://www.buymeacoffee.com/ooodman">Buy me a boba 🧋</FlowbiteFooter.Link>
         </FlowbiteFooter.LinkGroup>
       </div>
       <div className="justify-self-center lg:justify-self-end">
