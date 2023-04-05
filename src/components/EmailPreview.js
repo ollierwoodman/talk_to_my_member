@@ -1,8 +1,7 @@
 import { Textarea, Label } from "flowbite-react";
 import React from "react";
 
-export default function EmailPreview({recipient, subject, body}) {
-  const bodyPlaceholder = `I. Introduction
+export const bodyPlaceholder = `I. Introduction
       Brief greeting, addressing the representative by their title
       Introduce yourself and state the purpose of your email: to express your support for a particular policy and to urge them to take action on it
 
@@ -23,6 +22,7 @@ export default function EmailPreview({recipient, subject, body}) {
       Provide your contact information (name, address and perhaps a phone number)
       End with a polite closing.`
 
+export default function EmailPreview({recipient, subject, body}) {
   let content = body ? body : bodyPlaceholder;
 
   return (

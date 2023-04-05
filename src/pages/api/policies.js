@@ -1,11 +1,19 @@
-import { getDataFromTheyVoteForYou } from "../../resources/theyvoteforyou";
+import axios from 'axios';
 
-export default function handler(req, res) {
-  if (req.method !== "GET") {
-    res.status(401).json("Not a GET request");
+export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+      res.status(400).json('Not a GET request');
   }
 
-  const response = getDataFromTheyVoteForYou("", policies.json);
+  const they_vote_for_you_url = new URL(`${process.env.THEY_VOTE_FOR_YOU_API_URL}policies.json`);
 
-  res.status(200).json(response.json());
+  they_vote_for_you_url.searchParams.set('key', process.env.THEY_VOTE_FOR_YOU_API_KEY);
+  
+  axios.get(they_vote_for_you_url)
+    .then((policies_reponse) => {
+      res.status(200).json(policies_reponse.data);
+    })
+    .catch((err) => {
+      res.status(500).json({error: "Failed to retrieve policies"})
+    });
 }

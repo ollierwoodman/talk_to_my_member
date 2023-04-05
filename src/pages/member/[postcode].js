@@ -1,20 +1,17 @@
 import HeadTag from "@/components/HeadTag";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Alert, Card } from "flowbite-react";
 import MemberDetails from "@/components/MemberDetails";
-import MemberFinder from "@/components/MemberFinder"
-import { PARAM_NAME_POSTCODE } from "./find";
+import MemberFinderForm from "@/components/MemberFinderForm"
+import { Alert, Card, Spinner } from "flowbite-react";
+import { isAustralianPostcode, PARAM_NAME_POSTCODE } from "./find";
+import { useMember } from "@/resources/useMember";
 
-export const postcodePattern = /^\d{4}$/;
+export default function Member({ postcode }) {
+  const { data: member, error: memberError, isLoading: memberIsLoading } = useMember(postcode);
 
-export function isAustralianPostcode(str) {
-  // 4 digits, e.g. 0200, 4567
-  return postcodePattern.test(str);
-}
-
-export default function Member({ postcode, mp_data, postcodeIsValid }) {
-  let content = <></>
+  let content = null;
+  const postcodeIsValid = isAustralianPostcode(postcode)
   
   if (!postcodeIsValid) {
     content = (
@@ -22,29 +19,58 @@ export default function Member({ postcode, mp_data, postcodeIsValid }) {
         <h5 className="text-2xl font-bold text-center tracking-tight text-gray-900 dark:text-white mb-4">
           Find your member
         </h5>
-        <MemberFinder />
+        <MemberFinderForm />
         <Alert
           color="red"
-          onDismiss={function onDismiss(){return alert("Alert dismissed!")}}
         >
-          <span>
-            <span className="font-medium">
-              Error!
-            </span>
-            {` "${postcode ? postcode : ''}" is not a valid postcode`}
+          <span className="font-bold">
+            Whoops!
           </span>
+          {` "${postcode ? postcode : ''}" is not a valid postcode`}
         </Alert>
       </>
     );
-  } else {
+  }
+
+  if (memberIsLoading) {
     content = (
-      <>
-        <h5 className="text-2xl font-bold text-center tracking-tight text-gray-900 dark:text-white mb-4">
-          About your member
+      <div className="flex flex-col text-center gap-4">
+        <h5 className="tracking-tight text-gray-900 dark:text-white mb-2">
+          About your member at
+          {` postcode "${postcode}"`}
         </h5>
-        <MemberDetails data={mp_data} />
-      </>
+        <Spinner size="xl" />
+      </div>
     )
+  } else {
+    if (member && member.mp_data && member.mp_data.data) {
+      content = (
+        <>
+          <h5 className="text-center tracking-tight text-gray-900 dark:text-white mb-2">
+            About your member at
+            {` postcode "${postcode}"`}
+          </h5>
+          <MemberDetails data={member.mp_data.data} />
+        </>
+      )
+    } else {
+      content = (
+        <>
+          <h5 className="text-2xl font-bold text-center tracking-tight text-gray-900 dark:text-white mb-4">
+            Find your member
+          </h5>
+          <MemberFinderForm />
+          <Alert
+            color="yellow"
+          >
+            <span className="font-bold">
+              Oh no!
+            </span>
+            {` We couldn't find a member for the postcode "${postcode ? postcode : ''}"`}
+          </Alert>
+        </>
+      );
+    }
   }
 
   return (
@@ -53,7 +79,7 @@ export default function Member({ postcode, mp_data, postcodeIsValid }) {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="bg-blue-100 flex flex-wrap flex-1 justify-center items-center px-4 py-4 lg:px-32">
-          <Card className="">
+          <Card className="md:px-16">
             {content}
           </Card>
         </main>
@@ -63,37 +89,10 @@ export default function Member({ postcode, mp_data, postcodeIsValid }) {
   );
 }
 
-// export async function getStaticPaths() {
-//   const postcodesToPrerender = ["2000", "3000", "4000", "5000", "6000", "7000"];
-
-//   return {
-//     paths: postcodesToPrerender.map((_postcode) => {
-//       return { params: { postcode: _postcode } };
-//     }),
-//     fallback: true,
-//   };
-// }
-
 export async function getServerSideProps(context) {
-  const postcode = context.params[PARAM_NAME_POSTCODE];
-  let mp_data = {};
-  let postcodeIsValid = true;
-
-  if (!isAustralianPostcode(context.params[PARAM_NAME_POSTCODE])) {
-    postcodeIsValid = false;
-    return { props: { postcode, mp_data, postcodeIsValid } };
+  return {
+    props: {
+      postcode: (context.query[PARAM_NAME_POSTCODE]),
+    }
   }
-
-  const SAVEOURMEDICARE_API_URL = process.env.SAVEOURMEDICARE_API_URL;
-
-  const url = new URL(`${SAVEOURMEDICARE_API_URL}postcode/${postcode}`);
-
-  // Fetch data from external API
-  const res = await fetch(url);
-  mp_data = await res.json();
-
-  console.log(mp_data)
-
-  // Pass data to the page via props
-  return { props: { postcode, mp_data, postcodeIsValid } };
 }

@@ -10,19 +10,19 @@ export default function Header({ path }) {
           </svg>
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Talk to your member</span>
         </Navbar.Brand>
-        <div className={path === '/new' ? "flex" : "flex md:order-2"}>
-          <Button href="/new"
+        <div className={path === '/new/email' ? "flex" : "flex md:order-2"}>
+          <Button href="/new/email"
             gradientDuoTone="purpleToPink"
-            className={path === '/new' ? "hidden" : "hidden md:flex"}
+            className={path === '/new/email' ? "hidden" : "hidden md:flex"}
           >
             New email
           </Button>
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link href="/" active={"/" === path} >Home</Navbar.Link>
-          <Navbar.Link href="/member/find" active={"/member/find" === path}>Find my member</Navbar.Link>
-          <Navbar.Link href="/new" active={"/new" === path} className="flex items-center md:hidden">
+          <Navbar.Link href="/">Home</Navbar.Link>
+          <Navbar.Link href="/member/find">Find my member</Navbar.Link>
+          <Navbar.Link href="/new/email" className="flex items-center md:hidden">
             <span className="text-white -ml-3 py-1 px-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 align-self-center">
               New email
             </span>
