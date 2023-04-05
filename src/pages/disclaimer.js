@@ -8,9 +8,9 @@ export default function Disclaimer() {
       <HeadTag title="Disclaimer" />
       <div className='min-h-screen flex flex-col'>
         <Header />
-        <div className='flex flex-wrap flex-1 justify-center items-center bg-purple-100 px-4 py-4 lg:px-32'>
-          <div class="rounded-md bg-gradient-to-r from-pink-500 to-purple-500 p-2">
-            <div class="h-full max-w-xl bg-white py-4 px-8 rounded">
+        <div className='flex flex-wrap flex-1 justify-center items-center bg-blue-100 px-4 py-4 lg:px-32'>
+          <div class="rounded-md bg-blue-700 p-2">
+            <div class="h-full max-w-3xl bg-white py-4 px-8 rounded">
               <h5 className="text-2xl mb-2 font-bold text-center tracking-tight text-gray-900 dark:text-white">
                 Disclaimer
               </h5>
