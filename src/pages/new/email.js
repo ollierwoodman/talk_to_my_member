@@ -372,11 +372,11 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
 export async function getServerSideProps(context) {
   return {
     props: {
-      initialPostcode: context.query[PARAM_NAME_POSTCODE] ? context.query[PARAM_NAME_POSTCODE] : "",
+      initialPostcode: context.query[PARAM_NAME_POSTCODE] ? decodeURIComponent(context.query[PARAM_NAME_POSTCODE]) : "",
       initialIsFor: context.query[PARAM_NAME_FORORAGAINST] === "against" ? false : true, 
-      initialPolicyName: context.query[PARAM_NAME_POLICYNAME] ? context.query[PARAM_NAME_POLICYNAME] : "", 
-      initialUsername: context.query[PARAM_NAME_USER_FULL_NAME] ? context.query[PARAM_NAME_USER_FULL_NAME] : "", 
-      initialAddress: context.query[PARAM_NAME_USER_FULL_ADDRESS] ? context.query[PARAM_NAME_USER_FULL_ADDRESS] : "",
+      initialPolicyName: context.query[PARAM_NAME_POLICYNAME] ? decodeURIComponent(context.query[PARAM_NAME_POLICYNAME]) : "", 
+      initialUsername: context.query[PARAM_NAME_USER_FULL_NAME] ? decodeURIComponent(context.query[PARAM_NAME_USER_FULL_NAME]) : "", 
+      initialAddress: context.query[PARAM_NAME_USER_FULL_ADDRESS] ? decodeURIComponent(context.query[PARAM_NAME_USER_FULL_ADDRESS]) : "",
     }
   }
 }

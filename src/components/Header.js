@@ -1,4 +1,5 @@
 import { Navbar, Button, Badge } from "flowbite-react";
+import NewEmailButton from "./NewEmailButton";
 
 export default function Header({ path }) {
   return (
@@ -11,12 +12,7 @@ export default function Header({ path }) {
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Talk to my member</span>
         </Navbar.Brand>
         <div className={path === '/new/email' ? "flex" : "flex md:order-2"}>
-          <Button href="/new/email"
-            gradientDuoTone="purpleToPink"
-            className={path === '/new/email' ? "hidden" : "hidden md:flex"}
-          >
-            New email
-          </Button>
+          <NewEmailButton className={path === '/new/email' ? "hidden" : "hidden md:flex"} />
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>

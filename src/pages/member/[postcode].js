@@ -43,14 +43,15 @@ export default function Member({ postcode }) {
       </div>
     )
   } else {
-    if (member && member.mp_data && member.mp_data.data) {
+    if (member && member.mp_data && member.postcode && member.mp_data.data) {
       content = (
         <>
           <h5 className="text-center tracking-tight text-gray-900 dark:text-white mb-2">
-            About your member at
-            {` postcode "${postcode}"`}
+            Your member for
+            {` postcode "${postcode}" `}
+            is:
           </h5>
-          <MemberDetails data={member.mp_data.data} />
+          <MemberDetails data={member.mp_data.data} postcode={member.postcode} />
         </>
       )
     } else {
@@ -79,7 +80,7 @@ export default function Member({ postcode }) {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="bg-blue-100 flex flex-wrap flex-1 justify-center items-center px-4 py-4 lg:px-32">
-          <Card className="md:px-16">
+          <Card className="max-w-3xl md:px-16">
             {content}
           </Card>
         </main>
