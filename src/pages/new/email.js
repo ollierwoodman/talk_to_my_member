@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HeadTag from "@/components/HeadTag";
-import { Card, Button, Spinner, Label, TextInput, ToggleSwitch, Alert, Textarea, Modal } from "flowbite-react";
+import { Card, Button, Spinner, Label, TextInput, ToggleSwitch, Alert, Textarea } from "flowbite-react";
 import { useMember } from "@/resources/useMember";
 import { useState } from "react";
 import { isAustralianPostcode, PARAM_NAME_POSTCODE, POSTCODE_PATTERN } from "../member/find";
@@ -157,7 +157,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
 
   return (
     <>
-      <HeadTag title="Generate email" />
+      <HeadTag title="New email" />
       <Header path="/new/email" />
       <main className="bg-purple-100 px-4 py-4 lg:px-32">
         <>
@@ -190,15 +190,17 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                     {policiesOptions}
                   </datalist>
                 </div>
-                <Button 
+                <button 
+                  className={`text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-600 hover:to-purple-600 focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-800 group flex h-min items-center justify-center p-0.5 text-center font-medium focus:z-10 rounded-lg`}
                   onClick={() => {setShouldCompose(true)}}
-                  gradientDuoTone="purpleToPink"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mr-2 w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                  </svg>
-                  Write email for me
-                </Button>
+                  <span class="flex items-center rounded-md text-sm px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mr-2 w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                    </svg>
+                    Write email for me
+                  </span>
+                </button>
                 <p className="text-xs text-gray-500 text-center">Powered by ChatGPT.</p>
               </Card>
               <Card className="">
