@@ -1,6 +1,7 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeadTag from '@/components/HeadTag'
+import { Card } from 'flowbite-react'
 import Link from 'next/link'
 
 export default function SupportUs() {
@@ -9,9 +10,9 @@ export default function SupportUs() {
       <HeadTag title="Support us" />
       <div className='min-h-screen flex flex-col'>
         <Header />
-        <div className='flex flex-wrap flex-1 justify-center items-center bg-blue-100 px-4 py-4 lg:px-32'>
-          <div class="rounded-md bg-blue-700 p-1">
-            <div class="h-full max-w-3xl bg-white py-4 px-8 rounded">
+        <div className='bg-blue-100 flex flex-wrap flex-1 justify-center items-center px-4 py-4 lg:px-32'>
+          <div className="max-w-3xl">
+            <Card>
               <h5 className="text-2xl mb-2 font-bold text-center tracking-tight text-gray-900 dark:text-white">
                 Ways to support this website
               </h5>
@@ -36,7 +37,7 @@ export default function SupportUs() {
               <p className='text-justify'>
                 While completely unecessary, you can donate to this project via <Link className="underline text-blue-700" href={'https://www.buymeacoffee.com/ooodman'}>Buy Me a Coffee</Link>. This project is completely non-profit, hence all donations will go towards hosting, supporting and further improving the website.
               </p>
-            </div>
+            </Card>
           </div>
         </div>
         <Footer className="" />

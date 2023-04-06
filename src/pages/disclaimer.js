@@ -1,6 +1,7 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeadTag from '@/components/HeadTag'
+import { Card } from 'flowbite-react'
 
 export default function Disclaimer() {
   return (
@@ -8,9 +9,9 @@ export default function Disclaimer() {
       <HeadTag title="Disclaimer" />
       <div className='min-h-screen flex flex-col'>
         <Header />
-        <div className='flex flex-wrap flex-1 justify-center items-center bg-blue-100 px-4 py-4 lg:px-32'>
-          <div class="rounded-md bg-blue-700 p-1">
-            <div class="h-full max-w-3xl bg-white py-4 px-8 rounded">
+        <div className='bg-blue-100 flex flex-wrap flex-1 justify-center items-center px-4 py-4 lg:px-32'>
+          <div className="max-w-3xl">
+            <Card>
               <h5 className="text-2xl mb-2 font-bold text-center tracking-tight text-gray-900 dark:text-white">
                 Disclaimer
               </h5>
@@ -37,7 +38,7 @@ export default function Disclaimer() {
               <p className='text-justify'>
                 By using this website, you agree that you are responsible for any how any text generated while using the website is used or distributed.  
               </p>
-            </div>
+            </Card>
           </div>
         </div>
         <Footer className="" />

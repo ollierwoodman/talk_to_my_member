@@ -149,7 +149,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
           placeholder="Email content will appear here..."
           value={emailBody ? emailBody : EMAIL_BODY_INITIAL}
           disabled={true}
-          rows={16}
+          rows={15}
         />
       </>;
     }
