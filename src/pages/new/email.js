@@ -95,10 +95,10 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
     recipientContent = <Spinner size="xl" className="" />
   } else {
     if (member && member.mp_data && member.mp_data.data) {
-      const recipientTitle = member && member.mp_data && member.mp_data.data && member.mp_data.data.salutation;
-      const recipientFirstName = member && member.mp_data && member.mp_data.data && member.mp_data.data.first_name;
-      const recipientSurname = member && member.mp_data && member.mp_data.data && member.mp_data.data.surname;
-      const recipientEmailAddress = member && member.mp_data && member.mp_data.data && member.mp_data.data.email_address;
+      const recipientTitle = member.mp_data.data.salutation;
+      const recipientFirstName = member.mp_data.data.first_name;
+      const recipientSurname = member.mp_data.data.surname;
+      const recipientEmailAddress = member.mp_data.data.email_address;
       
       emailRecipient = recipientEmailAddress;
       
@@ -159,10 +159,10 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
     <>
       <HeadTag title="New email" />
       <Header path="/new/email" />
-      <main className="bg-purple-100 px-4 py-4 lg:px-32">
-        <>
+      <main className="flex justify-center items-center bg-purple-100 px-4 py-4">
+        <div className="max-w-7xl">
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 sm:col-span-6 xl:col-span-4 space-y-4">
+            <div className="col-span-12 sm:col-span-6 xl:col-span-5 space-y-4">
               <Card className="">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   1. What policy do you want to talk about?
@@ -194,7 +194,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                   className={`text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-600 hover:to-purple-600 focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-800 group flex h-min items-center justify-center p-0.5 text-center font-medium focus:z-10 rounded-lg`}
                   onClick={() => {setShouldCompose(true)}}
                 >
-                  <span class="flex items-center rounded-md text-sm px-4 py-2">
+                  <span className="flex items-center rounded-md text-sm px-4 py-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mr-2 w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                     </svg>
@@ -256,10 +256,12 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                     onChange={onAddressChange}
                   />
                 </div>
-                <p className="text-xs text-gray-500 text-center">We don't store or share these details with anyone.</p>
+                <p className="text-xs text-gray-500 text-center">
+                  We don't store or share these details with anyone.
+                </p>
               </Card>
             </div>
-            <div className="flex flex-col col-span-12 sm:col-span-6 xl:col-span-8">
+            <div className="flex flex-col col-span-12 sm:col-span-6 xl:col-span-7">
               <Card id="results" className="">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   Your generated email:
@@ -289,11 +291,11 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                 </p>
                 {emailContent}
                 <div className={`grid grid-cols-1 xl:grid-cols-2 gap-2 ${completionIsLoading ? "hidden" : ""}`}>
-                  <Button
-                    color="gray"
+                  <button
+                    className="text-white text-sm bg-gray-500 border border-transparent hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 disabled:hover:bg-gray-500 dark:bg-gray-500 dark:hover:bg-gray-500 dark:focus:ring-gray-600 dark:disabled:hover:bg-gray-500 group flex h-min items-center justify-center p-2.5 text-center font-medium focus:z-10 rounded-lg"
                     onClick={async () => {
                       try {
-                        await navigator.clipboard.writeText(emailBody ? emailBody : EMAIL_BODY_INITIAL);
+                        await navigator.clipboard.writeText(`${emailRecipient ? `TO: \n${emailRecipient}\n\n` : ``}SUBJECT: \n${emailSubject ? emailSubject : `In ${isFor ? "support of" : "opposition of"} [policy]`}\n\nBODY: \n${emailBody ? emailBody : EMAIL_BODY_INITIAL}`);
                         console.log("Content copied to clipboard");
                       } catch (err) {
                         console.error("Failed to copy: ", err);
@@ -315,8 +317,8 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                       />
                     </svg>
                     Copy to clipboard
-                  </Button>
-                  <Link href={constructMailToURI(emailRecipient, emailSubject, emailBody)} 
+                  </button>
+                  <button href={constructMailToURI(emailRecipient, emailSubject, emailBody)} 
                     className="text-white text-sm bg-blue-700 border border-transparent hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 disabled:hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 dark:disabled:hover:bg-blue-600 group flex h-min items-center justify-center p-2.5 text-center font-medium focus:z-10 rounded-lg"
                   >
                     <svg
@@ -334,13 +336,13 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                       />
                     </svg>
                     Send email
-                  </Link>
+                  </button>
                 </div>
                 <p className="text-xs text-gray-500 text-center">It is expected that you proofread and edit the generated email yourself before sending it.</p>
               </Card>
             </div>
           </div>
-        </>
+        </div>
       </main>
       <Footer />
       {/* <React.Fragment>
