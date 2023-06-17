@@ -80,7 +80,7 @@ export default function Member({ postcode }) {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="bg-blue-100 flex flex-wrap flex-1 justify-center items-center px-4 py-4 lg:px-32">
-          <Card className="max-w-3xl md:px-16">
+          <Card className="max-w-3xl">
             {content}
           </Card>
         </main>
