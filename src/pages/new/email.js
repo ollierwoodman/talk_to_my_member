@@ -10,7 +10,7 @@ import { usePolicies } from "@/resources/usePolicies";
 import { EMAIL_BODY_INITIAL, PARAM_NAME_FORORAGAINST, PARAM_NAME_POLICYNAME } from "../api/compose";
 import Link from "next/link";
 import React from "react";
-import LegoLoader from "@/components/LegoLoader";
+import LegoSpinner from "@/components/LegoSpinner";
 
 export const PARAM_NAME_STATE = "state";
 export const PARAM_NAME_USER_FULL_NAME = "username";
@@ -135,7 +135,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
   }
 
   if (completionIsLoading) {
-    emailContent = <LegoLoader />
+    emailContent = <LegoSpinner />
   } else {
     if (completionError) {
       // console.error(completionError)

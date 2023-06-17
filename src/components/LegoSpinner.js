@@ -1,28 +1,18 @@
 import { Card } from "flowbite-react";
 import Link from "next/link";
 
-export default function LegoLoader() {
+export default function LegoSpinner() {
   return (
     <Card className="flex flex-col bg-gray-50 border-gray-300">
       <div className="message">
-        <p className="message__line">
-          Loading…
-        </p>
-        <p className="message__line">
-          Building your email body…
-        </p>
-        <p className="message__line">
-          Brick by boring brick…
-        </p>
-        <p className="message__line">
-          Saving you time, making your change
-        </p>
+        <p className="message__line">Loading…</p>
+        <p className="message__line">Building your email body…</p>
+        <p className="message__line">Brick by boring brick…</p>
+        <p className="message__line">Saving you time, making your change</p>
         <p className="message__line">
           Might take longer to build than the Death Star…
         </p>
-        <p className="message__line">
-          Can't be far off now…
-        </p>
+        <p className="message__line">Can't be far off now…</p>
       </div>
       <div className="tower">
         <div className="tower__group">
@@ -300,7 +290,8 @@ export default function LegoLoader() {
           </div>
         </div>
       </div>
-      <Link href='https://codepen.io/jkantner/pen/BaPaoGm'
+      <Link
+        href="https://codepen.io/jkantner/pen/BaPaoGm"
         className="text-xs text-gray-500 text-center"
       >
         Animation by Jon Kantner
