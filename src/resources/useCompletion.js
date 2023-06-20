@@ -1,4 +1,3 @@
-
 import { PARAM_NAME_FORORAGAINST, PARAM_NAME_POLICYNAME } from '@/pages/api/compose'
 import useSWR from 'swr'
 const fetcher = (...args) => fetch(...args).then(res => res.json())

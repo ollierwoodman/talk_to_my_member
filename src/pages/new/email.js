@@ -7,14 +7,38 @@ import { useState } from "react";
 import { isAustralianPostcode, PARAM_NAME_POSTCODE, POSTCODE_PATTERN } from "../member/find";
 import { useCompletion } from "@/resources/useCompletion";
 import { usePolicies } from "@/resources/usePolicies";
-import { EMAIL_BODY_INITIAL, PARAM_NAME_FORORAGAINST, PARAM_NAME_POLICYNAME } from "../api/compose";
-import Link from "next/link";
+import { PARAM_NAME_FORORAGAINST, PARAM_NAME_POLICYNAME } from "../api/compose";
 import React from "react";
 import LegoSpinner from "@/components/LegoSpinner";
 
 export const PARAM_NAME_STATE = "state";
 export const PARAM_NAME_USER_FULL_NAME = "username";
 export const PARAM_NAME_USER_FULL_ADDRESS = "address";
+
+const EMAIL_BODY_INITIAL = `I. Introduction
+  Brief greeting, addressing the representative by their title
+  Introduce yourself and state the purpose of your email: to express your support for a particular policy and to urge them to take action on it
+
+II. Background
+  Provide context and background information about the policy
+  Explain why this policy is important to you and how it would benefit the community
+
+III. Supporting Evidence
+  Provide evidence to support your argument, such as statistics or personal anecdotes
+  Explain how this policy aligns with the representative's values and party platform
+
+IV. Call to Action
+  Clearly state what action you would like the representative to take
+  Explain how their action would benefit the community and why it is important
+
+V. Conclusion
+  Thank the representative for their time and consideration
+  End with a polite closing
+  Provide your contact information (name, address and perhaps a phone number)`
+
+function memberDataExists(memberData) {
+  return memberData && memberData.mp_data && memberData.mp_data.data
+}
 
 function sortAndMapPoliciesToOptions(policies) {
   const sortedPolicies = policies.sort((a, b) => new Date(b.last_edited_at) - new Date(a.last_edited_at));
@@ -23,6 +47,31 @@ function sortAndMapPoliciesToOptions(policies) {
       {option.name}
     </option>
   ));
+}
+
+function buildEmailBody(completionData, shouldCompose, username, address, memberData){
+  if (!completionData || !completionData.text) {
+    if (shouldCompose) {
+      return 'Error encountered while generating email text'
+    } else {
+      return EMAIL_BODY_INITIAL
+    }
+  }
+  
+  let out = '';
+  if (memberDataExists(memberData)) {     
+    out += `Dear ${member.mp_data.data.salutation} ${member.mp_data.data.first_name} ${member.mp_data.data.surname}`
+  } else {
+    out += `Dear [YOUR MEMBER'S TITLE AND FULL NAME]`
+  }
+
+  out += `${completionData.text}`
+
+  out += `Yours sincerely
+  ${ username ? username : '[YOUR FULL NAME]' }
+  ${ address ? address : '[YOUR ADDRESS]' }`
+
+  return out
 }
 
 function constructMailToURI(email, subject, body) {
@@ -73,32 +122,49 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
 
   let policiesOptions = <></>
   let recipientContent = <></>
+  let subjectContent = <></>
   let emailContent = <></>
 
-  const { data: policies, error: policiesError, isLoading: policiesIsLoading } = usePolicies();
-  const { data: member, error: memberError, isLoading: memberIsLoading } = useMember(postcode, isAustralianPostcode(postcode));
-  const { data: completion, error: completionError, isLoading: completionIsLoading } = useCompletion(isFor, policyName, shouldCompose);
+  const { data: policiesData, error: policiesError, isLoading: policiesIsLoading } = usePolicies();
+  const { data: memberData, error: memberError, isLoading: memberIsLoading } = useMember(postcode, isAustralianPostcode(postcode));
+  const { data: completionData, error: completionError, isLoading: completionIsLoading } = useCompletion(isFor, policyName, shouldCompose);
 
   if (policyName) {
     emailSubject = `In ${isFor ? "support of" : "opposition of"} ${policyName}`;
+    subjectContent = <>
+      <Label htmlFor="subject" value="Email subject" hidden />
+      <Textarea
+        id="subject"
+        className="whitespace-pre-line flex-1"
+        value={`${emailSubject}`}
+        disabled={true}
+        rows={1}
+      />
+    </>
+  } else {
+    emailSubject = `Sample subject`;
+    subjectContent = <>
+      <Alert
+        className="flex-grow"
+        color={"blue"}
+      >
+        {" Enter a policy for a sample subject"}
+      </Alert>
+    </>
   }
 
-  if (policiesIsLoading) {
-    policiesOptions = [];
-  } else {
-    if (!policiesError) {
-      policiesOptions = sortAndMapPoliciesToOptions(policies);
-    }
+  if (!policiesIsLoading && !policiesError) {
+    policiesOptions = sortAndMapPoliciesToOptions(policiesData);
   }
 
   if (memberIsLoading) {
     recipientContent = <Spinner size="xl" className="" />
   } else {
-    if (member && member.mp_data && member.mp_data.data) {
-      const recipientTitle = member.mp_data.data.salutation;
-      const recipientFirstName = member.mp_data.data.first_name;
-      const recipientSurname = member.mp_data.data.surname;
-      const recipientEmailAddress = member.mp_data.data.email_address;
+    if (memberDataExists(memberData)) {
+      const recipientTitle = memberData.mp_data.data.salutation;
+      const recipientFirstName = memberData.mp_data.data.first_name;
+      const recipientSurname = memberData.mp_data.data.surname;
+      const recipientEmailAddress = memberData.mp_data.data.email_address;
       
       emailRecipient = recipientEmailAddress;
       
@@ -126,6 +192,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
 
       recipientContent = <>
         <Alert
+          className="flex-grow"
           color={alertColour}
         >
           {` ${alertMessage}`}
@@ -140,14 +207,13 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
     if (completionError) {
       // console.error(completionError)
     } else {
-      // console.log(completion)
       emailContent = <>
         <Label htmlFor="emailbody" value="Email body" hidden />
         <Textarea
           id="emailbody"
           className="whitespace-pre-line flex-1"
           placeholder="Email content will appear here..."
-          value={emailBody ? emailBody : EMAIL_BODY_INITIAL}
+          value={buildEmailBody(completionData, shouldCompose, username, address, memberData)}
           disabled={true}
           rows={15}
         />
@@ -276,15 +342,7 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
                   <p className="text-md text-gray-900 dark:text-white my-3">
                     Subject:
                   </p>
-                  <Label htmlFor="subject" value="Email subject" hidden />
-                  <Textarea
-                    id="subject"
-                    className="whitespace-pre-line flex-1"
-                    placeholder="Enter a policy for a sample subject"
-                    value={`${emailSubject}`}
-                    disabled={true}
-                    rows={1}
-                  />
+                  {subjectContent}
                 </div>
                 <p className="text-md text-gray-900 dark:text-white mt-4">
                   The first draft of your message:
