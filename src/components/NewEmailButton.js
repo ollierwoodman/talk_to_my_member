@@ -21,7 +21,7 @@ function buildButtonHref(postcode, isFor, policyName, username, address) {
     queryParams.address = address;
   }
   const queryString = new URLSearchParams(queryParams).toString();
-  return `${baseUrl}?${queryString}`;
+  return `${baseUrl}${queryString ? '?' : ''}${queryString}`;
 }
 
 export default function NewEmailButton({className, postcode, isFor, policyName, username, address, buttonText=defaultButtonText}) {
