@@ -158,10 +158,10 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
   return (
     <>
       <HeadTag title="New email" />
-      <Header path="/new/email" />
-      <main className="flex justify-center items-center bg-purple-100 px-4 py-4">
-        <div className="max-w-7xl">
-          <div className="grid grid-cols-12 gap-4">
+      <div className='min-h-screen flex flex-col'>
+        <Header path="/new/email" />
+        <main className="flex flex-1 justify-center items-center bg-purple-100 px-4 py-4">
+          <div className="grid grid-cols-12 gap-4 max-w-7xl">
             <div className="col-span-12 sm:col-span-6 xl:col-span-5 space-y-4">
               <Card className="">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -342,9 +342,9 @@ export default function NewEmail({ initialPostcode="", initialIsFor=true, initia
               </Card>
             </div>
           </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </div>
       {/* <React.Fragment>
         <Modal
           dismissible={true}
